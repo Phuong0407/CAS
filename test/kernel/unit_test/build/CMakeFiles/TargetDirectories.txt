@@ -1,0 +1,3 @@
+/media/dtphuong/DATA/SELFINITIATION/CAS/test/kernel/unit_test/build/CMakeFiles/test_tokenizer.dir
+/media/dtphuong/DATA/SELFINITIATION/CAS/test/kernel/unit_test/build/CMakeFiles/edit_cache.dir
+/media/dtphuong/DATA/SELFINITIATION/CAS/test/kernel/unit_test/build/CMakeFiles/rebuild_cache.dir
