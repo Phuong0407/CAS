@@ -1,1 +1,0 @@
-/usr/bin/cc CMakeFiles/test_tokenizer.dir/test_tokenizer.c.o CMakeFiles/test_tokenizer.dir/media/dtphuong/DATA/SELFINITIATION/CAS/src/kernel/tokenizer.c.o -o test_tokenizer 
