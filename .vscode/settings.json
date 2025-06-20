@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "tokenizer.h": "c"
+    },
+    "cmake.sourceDirectory": "/media/diepthanhphuong/DATA/ACADEMIC_SELFINITIATED_WORKS/CAS/test/kernel/unit_test",
+    "cmake.ignoreCMakeListsMissing": true
+}

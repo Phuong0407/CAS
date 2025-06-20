@@ -1,0 +1,36 @@
+#ifndef config_h
+#define config_h
+
+#include <stdint.h>
+
+#if defined(__precision64)
+
+    #define CASIdx_t    int64_t
+    #define CASInt_t    int64_t
+    #define CASUInt_t   uint64_t
+    #define CASFP_t     double
+
+#elif defined(__precision32)
+
+    #define CASIdx_t    int32_t
+    #define CASInt_t    int32_t
+    #define CASUInt_t   uint32_t
+    #define CASFP_t     float
+
+#elif defined(__precision16)
+
+    #define CASIdx_t    int16_t
+    #define CASInt_t    int16_t
+    #define CASUInt_t   uint16_t
+    #define CASFP_t     float
+
+#else
+
+    #define CASIdx_t    int8_t
+    #define CASInt_t    int8_t
+    #define CASUInt_t   uint8_t
+    #define CASFP_t     float
+
+#endif // __precisionxx
+
+#endif // config_h
