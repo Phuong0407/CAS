@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# Ignore build folders in any depth
+**/build/
