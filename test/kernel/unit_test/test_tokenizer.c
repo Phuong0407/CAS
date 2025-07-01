@@ -1,13 +1,23 @@
 #include <stdio.h>
 #include <string.h>
-#include "tokenizer.h"
+#include <kernel/tokenization.h>
 
 void println_token(const Token_t *token) {
-    printf("%s\n", token->text);
+    printf("%s\t", token->tokn);
+
+    switch (token->type) {
+        case NUM:   printf("number");           break;
+        case SYM:   printf("symbolic");         break;
+        case OPR:   printf("operator");         break;
+        case PRT:   printf("parenthese");       break;
+        default:    printf("unknown");          break;
+    }
+    printf("\n");
 }
 
+
 void print_token(const Token_t *token) {
-    printf("%s", token->text);
+    printf("%s", token->tokn);
 }
 
 int main() {
@@ -16,36 +26,24 @@ int main() {
         perror("Error opening expressions.txt");
         return 1;
     }
-
+    
     char line[256];
     while (fgets(line, sizeof(line), fp)) {
         line[strcspn(line, "\n")] = '\0';
-
-        if (line[0] == '\0') continue;
-
+        
+        if (line[0] == '\0')
+            continue;
+        
         printf("%s\n", line);
 
-        Token_t tokens[MAX_NUM_TOKENS];
+        Token_t tokens[MAXNTOK];
         int num_tokens = 0;
 
-        int result = tokenize(line, tokens, &num_tokens);
-
-        if (result < 0) {
-            if (result == TOKEN_INVALID_CHAR) {
-                printf("Error: Invalid character in input.\n");
-            } else if (result == TOKEN_OVERFLOW) {
-                printf("Error: Too many tokens.\n");
-            } else {
-                printf("Unknown error: %d\n", result);
-            }
-            continue;
-        }
-
+        for (int i = 0; i < 1000000; ++i)
+            tokenize(tokens, line, &num_tokens);
         printf("Parsed %d tokens:\n", num_tokens);
         for (int i = 0; i < num_tokens; ++i) {
             println_token(&tokens[i]);
-        } for (int i = 0; i < num_tokens; ++i) {
-            print_token(&tokens[i]);
         }
         printf("\n\n");
     }
