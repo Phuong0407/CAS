@@ -22,21 +22,20 @@
  * 
  *****************************************************************************/
 
-#include <number_tokenization.h>
+#include <kernel/number_tokenization.h>
 
-NUMSTATE tokenize_number(char *tok, const char *s, int i) {
+NUMSTATE tokenize_number(Token_t *tok, const char *s, int *i) {
     int j = 0;
     NUMSTATE state = N_STT;
 
-    while(s[i] != '\0' && j < MAXTOKLEN - 1) {
-        char c = s[i];
+    while(s[*i] != '\0' && j < MAXTOKLEN - 1) {
+        char c = s[*i];
         uint8_t cls = num_tab[(unsigned char)c];
-        NUMSTATE next = num_fsmtab[state][cls];
-        state = next;
+        state = num_fsmtab[state][cls];
         if (numtok_term[state]) break;
-        tok[j++] = s[i++];
+        tok->tokn[j++] = s[(*i)++];
     }
-    tok[j] = '\0';
+    tok->tokn[j] = '\0';
     switch (state) {
         case N_INT: return N_INT;
         case N_DEC: return N_DEC;
@@ -44,6 +43,7 @@ NUMSTATE tokenize_number(char *tok, const char *s, int i) {
         case N_STT: return N_STT;
         default:    return N_ERR;
     }
+    return N_ERR;
 }
 
 const char* state_str(NUMSTATE s) {

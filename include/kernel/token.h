@@ -32,39 +32,38 @@
 #include <ctype.h>
 #include <stdio.h>
 
-#define MAXNTOK                     512
-#define MAXTOKLEN                   64
+#define MAXNTOK             512
+#define MAXTOKLEN           32
 
-#define MAXNTOK_OVERFLOW            -1
-#define MAXTOKLEOVERFLOW          -2
+#define MAXNTOK_OVERFLOW    -1
+#define MAXTOKLEOVERFLOW    -2
 
-
-
-typedef uint8_t TokenTable_t;
-
-static const TokenTable_t oprt_tab[256] = {
-    [0 ... 255] = 0,
-    ['+'] = 1, ['-'] = 1,
-    ['*'] = 1, ['/'] = 1,
-    ['^'] = 1, ['!'] = 1,
-};
-
-static const TokenTable_t prth_tab[256] = {
-    [0 ... 255] = 0,
-    ['('] = 1, [')'] = 1,
-    ['<'] = 1, ['>'] = 1,
-};
-
-const static uint8_t num_tab[256] = {
-    [0 ... 255] = OTHER,
-    ['0' ... '9'] = DIGIT,
-    ['e'] = EXP, ['E'] = EXP,
-    ['+'] = SIGN, ['-'] = SIGN,
-    ['.'] = DOT,
-};
 
 typedef enum { NUM, PRT, OPR, SYM, STT, ERR } TOKEN;
-typedef enum { DIGIT, DOT, EXP, SIGN, OTHER } NUMTOKEN;
+
+static const uint8_t tok_tab[256] = {
+    [0 ... 255]     = ERR,
+
+    ['_']           = SYM,
+    ['a' ... 'z']   = SYM,
+    ['A' ... 'Z']   = SYM,
+
+    ['.']           = NUM,
+    ['0' ... '9']   = NUM,
+
+    ['+']           = OPR, 
+    ['-']           = OPR,
+    ['*']           = OPR, 
+    ['/']           = OPR,
+    ['^']           = OPR, 
+    ['!']           = OPR,
+
+    ['(']           = PRT, 
+    [')']           = PRT,
+    ['<']           = PRT, 
+    ['>']           = PRT,
+};
+
 
 typedef enum {
     T_STT,
@@ -79,13 +78,13 @@ const static TOKENSTATE tok_fsmtab[6][6] = {
     [T_STT] = {T_NUM,   T_PRT,  T_OPR,  T_SYM,  T_STT,  T_ERR},
     [T_NUM] = {T_ERR,   T_STT,  T_STT,  T_STT,  T_STT,  T_ERR},
     [T_PRT] = {T_STT,   T_STT,  T_STT,  T_STT,  T_STT,  T_ERR},
-    [T_OPR] = {T_STT,   T_ERR,  T_ERR,  T_STT,  T_STT,  T_ERR},
+    [T_OPR] = {T_STT,   T_STT,  T_ERR,  T_STT,  T_STT,  T_ERR},
     [T_SYM] = {T_ERR,   T_STT,  T_STT,  T_ERR,  T_STT,  T_ERR},
 };
 
-static const int token_term[] = {
-    [T_STT] = 1,
+static const int token_branch[] = {
     [T_ERR] = 1,
+    [T_STT] = 2,
     [T_NUM] = 0,
     [T_PRT] = 0,
     [T_OPR] = 0,
@@ -94,10 +93,43 @@ static const int token_term[] = {
 
 
 
+/**
+ *   if type == NUM
+ *  sbtype = 0 INT 
+ *   sbtype = 1 DEC
+ *   sbtype = 2 FLP
+
+    if type == OPR
+    sbtype = 0 UNITY_POSSIBLE    (+-)
+    sbtype = 1 UNITY_IMPOSSIBLE  (rest, * / ^ ! )
+
+ *  if type == PRT
+ *  sbtype = 0 LEFT_PRT ( <
+ *  sbtype = 1 RIGHT_PRT ) >
+
+ *  if type == SYM
+ *  sbtype = 0 DEFAULT
+ */
 typedef struct {
     char tokn[MAXTOKLEN];
     TOKEN type;
-    int stype;
+    int sbtype;
 } Token_t;
+
+static const uint8_t opr_oprsbtype[] = {
+    ['+'] = 0, 
+    ['-'] = 0,
+    ['*'] = 1, 
+    ['/'] = 1,
+    ['^'] = 1, 
+    ['!'] = 1,
+};
+
+static const uint8_t prt_prtsbtype[] = {
+    ['('] = 0, 
+    ['<'] = 0,
+    [')'] = 1, 
+    ['>'] = 1,
+};
 
 #endif // include_kernel_token_h

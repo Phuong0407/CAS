@@ -25,17 +25,32 @@
 #ifndef include_kernel_number_tokenization_h
 #define include_kernel_number_tokenization_h
 
-#include <token.h>
+#include <kernel/token.h>
+
+typedef enum { DIG, DOT, EXP, SIGN, OTHER } NUMTOKEN;
+
+static const uint8_t num_tab[256] = {
+    [0 ... 255]     = OTHER,
+    ['0' ... '9']   = DIG,
+    ['e']           = EXP,
+    ['E']           = EXP,
+    ['+']           = SIGN,
+    ['-']           = SIGN,
+    ['.']           = DOT,
+};
 
 typedef enum {
     N_STT,
     N_ERR,
     N_INT,
-    N_DOT, N_DEC,
-    N_EXP, N_SGN, N_FLP
+    N_DOT,
+    N_DEC,
+    N_EXP,
+    N_SGN,
+    N_FLP
 } NUMSTATE;
 
-const static NUMSTATE num_fsmtab[8][5] = {
+static const NUMSTATE num_fsmtab[8][5] = {
     [N_STT] = {N_INT,   N_DOT,  N_ERR,  N_STT,  N_STT},
     [N_INT] = {N_INT,   N_DEC,  N_EXP,  N_STT,  N_STT},
     [N_DOT] = {N_DEC,   N_ERR,  N_ERR,  N_ERR,  N_ERR},
@@ -56,7 +71,15 @@ static const int numtok_term[] = {
     [N_FLP] = 0,
 };
 
-NUMSTATE tokenize_number(char *tok, const char *s, int i);
+static const int numtoken_numsbtype[] = {
+    [N_INT] = 0,
+    [N_DEC] = 1,
+    [N_FLP] = 2,
+    [N_ERR] = 3,
+};
+
+
+NUMSTATE tokenize_number(Token_t *tok, const char *s, int *i);
 const char* state_str(NUMSTATE s);
 
 #endif // include_kernel_number_tokenization_h
