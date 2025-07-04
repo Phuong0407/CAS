@@ -43,7 +43,7 @@ typedef enum { NUM, PRT, OPR, SYM, STT, ERR } TOKEN;
 
 static const uint8_t tok_tab[256] = {
     [0 ... 255]     = ERR,
-
+    [' ']           = STT,
     ['_']           = SYM,
     ['a' ... 'z']   = SYM,
     ['A' ... 'Z']   = SYM,
@@ -82,7 +82,7 @@ const static TOKENSTATE tok_fsmtab[6][6] = {
     [T_SYM] = {T_ERR,   T_STT,  T_STT,  T_ERR,  T_STT,  T_ERR},
 };
 
-static const int token_branch[] = {
+static const int token_term[] = {
     [T_ERR] = 1,
     [T_STT] = 2,
     [T_NUM] = 0,

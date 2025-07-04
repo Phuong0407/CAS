@@ -38,6 +38,9 @@ TokenHandler handler_tab[] = {
 };
 
 void handle_stt(Token_t *tok, const char *s, int *i, int *ntok) {
+    while (s[*i] != '\0' && isspace((unsigned char)s[*i])) {
+        (*i)++;
+    }
 }
 
 void handle_num(Token_t* toks, const char* s, int *i, int *ntok) {
@@ -72,16 +75,15 @@ void handle_sym(Token_t* toks, const char* s, int *i, int *ntok) {
     (*ntok)++;
 }
 
-// __attribute__((optimize("no-stack-protector")))
 TOKENSTATE tokenize(Token_t *toks, const char *s, int *ntok) {
     int i = 0;
     TOKENSTATE state = T_STT;
 
     while (s[i] != '\0' && *ntok < MAXNTOK - 1) {
-        while (isspace(s[i])) i++;
         uint8_t cls = tok_tab[(unsigned char)s[i]];
-        state = tok_fsmtab[state][cls];
-        if (token_branch[state] == 1) break;
+        TOKENSTATE nextstate = tok_fsmtab[state][cls];
+        if (token_term[state] == 1) break;
+        state = nextstate;
         handler_tab[state](toks, s, &i, ntok);
     }
     return state;
