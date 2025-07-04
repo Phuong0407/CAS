@@ -7,9 +7,10 @@ void tokenize_symbol(Token_t *tok, const char *s, int *i) {
     while(s[*i] != '\0' && j < MAXTOKLEN - 1) {
         char c = s[*i];
         uint8_t cls = sym_tab[(unsigned char)c];
-        state = sym_fsmtab[state][cls];
-        if (state == S_STT) break;
+        SYMSTATE nextstate = sym_fsmtab[state][cls];
+        if (nextstate == S_STT) break;
         tok->tokn[j++] = s[(*i)++];
+        state = nextstate;
     }
     tok->tokn[j] = '\0';
 }

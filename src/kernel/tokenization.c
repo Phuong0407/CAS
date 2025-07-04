@@ -83,8 +83,8 @@ TOKENSTATE tokenize(Token_t *toks, const char *s, int *ntok) {
         uint8_t cls = tok_tab[(unsigned char)s[i]];
         TOKENSTATE nextstate = tok_fsmtab[state][cls];
         if (token_term[state] == 1) break;
-        state = nextstate;
         handler_tab[state](toks, s, &i, ntok);
+        state = nextstate;
     }
     return state;
 }

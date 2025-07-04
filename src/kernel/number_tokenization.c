@@ -31,9 +31,10 @@ NUMSTATE tokenize_number(Token_t *tok, const char *s, int *i) {
     while(s[*i] != '\0' && j < MAXTOKLEN - 1) {
         char c = s[*i];
         uint8_t cls = num_tab[(unsigned char)c];
-        state = num_fsmtab[state][cls];
-        if (numtok_term[state]) break;
+        NUMSTATE nextstate = num_fsmtab[state][cls];
+        if (numtok_term[nextstate]) break;
         tok->tokn[j++] = s[(*i)++];
+        state = nextstate;
     }
     tok->tokn[j] = '\0';
     switch (state) {
