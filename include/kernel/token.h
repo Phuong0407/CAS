@@ -33,7 +33,7 @@
 #include <stdio.h>
 
 #define MAXNTOK             512
-#define MAXTOKLEN           32
+#define MAXTOKLEN           64
 
 #define MAXNTOK_OVERFLOW    -1
 #define MAXTOKLEOVERFLOW    -2
@@ -111,9 +111,10 @@ static const int token_term[] = {
  *  sbtype = 0 DEFAULT
  */
 typedef struct {
-    char tokn[MAXTOKLEN];
-    TOKEN type;
-    int sbtype;
+    char tokn[MAXNTOK][MAXTOKLEN];
+    TOKEN type[MAXNTOK];
+    int sbtype[MAXNTOK];
+    int ntok;
 } Token_t;
 
 static const uint8_t opr_oprsbtype[] = {
@@ -131,5 +132,8 @@ static const uint8_t prt_prtsbtype[] = {
     [')'] = 1, 
     ['>'] = 1,
 };
+
+extern Token_t  *create_tokens();
+extern void     free_tokens(Token_t *tokens);
 
 #endif // include_kernel_token_h

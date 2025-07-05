@@ -33,10 +33,10 @@ NUMSTATE tokenize_number(Token_t *tok, const char *s, int *i) {
         uint8_t cls = num_tab[(unsigned char)c];
         NUMSTATE nextstate = num_fsmtab[state][cls];
         if (numtok_term[nextstate]) break;
-        tok->tokn[j++] = s[(*i)++];
+        tok->tokn[tok->ntok][j++] = s[(*i)++];
         state = nextstate;
     }
-    tok->tokn[j] = '\0';
+    tok->tokn[tok->ntok][j] = '\0';
     switch (state) {
         case N_INT: return N_INT;
         case N_DEC: return N_DEC;

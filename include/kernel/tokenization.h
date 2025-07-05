@@ -27,16 +27,16 @@
 
 #include <kernel/token.h>
 
-typedef void (*TokenHandler)(Token_t*, const char*, int*, int*);
+typedef void (*TokenHandler)(Token_t*, const char*, int*);
 
-extern void handle_stt(Token_t*, const char*, int*, int*);
-extern void handle_num(Token_t*, const char*, int*, int*);
-extern void handle_opr(Token_t*, const char*, int*, int*);
-extern void handle_prt(Token_t*, const char*, int*, int*);
-extern void handle_sym(Token_t*, const char*, int*, int*);
+extern void handle_stt(Token_t*, const char*, int*);
+extern void handle_num(Token_t*, const char*, int*);
+extern void handle_opr(Token_t*, const char*, int*);
+extern void handle_prt(Token_t*, const char*, int*);
+extern void handle_sym(Token_t*, const char*, int*);
 
 extern TokenHandler handler_tab[];
 
-TOKENSTATE tokenize(Token_t *toks, const char *s, int *ntok);
+TOKENSTATE tokenize(Token_t *toks, const char *s);
 
 #endif // include_kernel_tokenization_h

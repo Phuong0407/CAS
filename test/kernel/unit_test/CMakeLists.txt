@@ -17,6 +17,7 @@ add_executable(test_tokenizer
     ../../../src/kernel/tokenization.c
     ../../../src/kernel/number_tokenization.c
     ../../../src/kernel/symbol_tokenization.c
+    ../../../src/kernel/token.c
 )
 
 target_compile_options(test_tokenizer PRIVATE -Wall -Wextra)

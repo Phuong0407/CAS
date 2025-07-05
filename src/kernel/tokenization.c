@@ -37,53 +37,55 @@ TokenHandler handler_tab[] = {
     [T_STT] = handle_stt,
 };
 
-void handle_stt(Token_t *tok, const char *s, int *i, int *ntok) {
+void handle_stt(Token_t *toks, const char *s, int *i) {
     while (s[*i] != '\0' && isspace((unsigned char)s[*i])) {
         (*i)++;
     }
 }
 
-void handle_num(Token_t* toks, const char* s, int *i, int *ntok) {
-    NUMSTATE numtype    = tokenize_number(&toks[*ntok], s, i);
-    toks[*ntok].type    = NUM;
-    toks[*ntok].sbtype  = numtoken_numsbtype[numtype];
-    (*ntok)++;
+void handle_num(Token_t* toks, const char* s, int *i) {
+    NUMSTATE numtype        = tokenize_number(toks, s, i);
+    toks->type[toks->ntok] = NUM;
+    toks->sbtype[toks->ntok]  = numtoken_numsbtype[numtype];
+    (toks->ntok)++;
 }
 
-void handle_opr(Token_t* toks, const char* s, int *i, int *ntok) {
-    toks[*ntok].tokn[0] = s[*i];
-    toks[*ntok].tokn[1] = '\0';
-    toks[*ntok].type    = OPR;
-    toks[*ntok].sbtype  = opr_oprsbtype[(unsigned int)s[*i]];
-    (*ntok)++;
+void handle_opr(Token_t* toks, const char* s, int *i) {
+    (*toks).tokn[toks->ntok][0] = s[*i];
+    (*toks).tokn[toks->ntok][1] = '\0';
+    toks->type[toks->ntok]    = OPR;
+    toks->sbtype[toks->ntok]  = opr_oprsbtype[(unsigned int)s[*i]];
+    (toks->ntok)++;
     (*i)++;
 }
 
-void handle_prt(Token_t* toks, const char* s, int *i, int *ntok) {
-    toks[*ntok].tokn[0] = s[*i];
-    toks[*ntok].tokn[1] = '\0';
-    toks[*ntok].type    = PRT;
-    toks[*ntok].sbtype  = prt_prtsbtype[(unsigned int)s[*i]];
-    (*ntok)++;
+void handle_prt(Token_t* toks, const char* s, int *i) {
+    // printf("%d\t%d\n", toks->ntok, *i);
+    // printf("%d\n", s[*i]);
+    (*toks).tokn[toks->ntok][0] = s[*i];
+    (*toks).tokn[toks->ntok][1] = '\0';
+    toks->type[toks->ntok]    = PRT;
+    toks->sbtype[toks->ntok]  = prt_prtsbtype[(unsigned int)s[*i]];
+    (toks->ntok)++;
     (*i)++;
 }
 
-void handle_sym(Token_t* toks, const char* s, int *i, int *ntok) {
-    tokenize_symbol(&toks[(*ntok)], s, i);
-    toks[*ntok].type    = SYM;
-    toks[*ntok].sbtype  = 0;
-    (*ntok)++;
+void handle_sym(Token_t* toks, const char* s, int *i) {
+    tokenize_symbol(toks, s, i);
+    toks->type[toks->ntok]    = SYM;
+    toks->sbtype[toks->ntok]  = 0;
+    (toks->ntok)++;
 }
 
-TOKENSTATE tokenize(Token_t *toks, const char *s, int *ntok) {
+TOKENSTATE tokenize(Token_t *toks, const char *s) {
     int i = 0;
     TOKENSTATE state = T_STT;
 
-    while (s[i] != '\0' && *ntok < MAXNTOK - 1) {
+    while (s[i] != '\0' && toks->ntok < MAXNTOK - 1) {
         uint8_t cls = tok_tab[(unsigned char)s[i]];
         TOKENSTATE nextstate = tok_fsmtab[state][cls];
-        if (token_term[state] == 1) break;
-        handler_tab[state](toks, s, &i, ntok);
+        if (token_term[nextstate] == 1) break;
+        handler_tab[nextstate](toks, s, &i);
         state = nextstate;
     }
     return state;

@@ -9,8 +9,8 @@ void tokenize_symbol(Token_t *tok, const char *s, int *i) {
         uint8_t cls = sym_tab[(unsigned char)c];
         SYMSTATE nextstate = sym_fsmtab[state][cls];
         if (nextstate == S_STT) break;
-        tok->tokn[j++] = s[(*i)++];
+        tok->tokn[tok->ntok][j++] = s[(*i)++];
         state = nextstate;
     }
-    tok->tokn[j] = '\0';
+    tok->tokn[tok->ntok][j] = '\0';
 }

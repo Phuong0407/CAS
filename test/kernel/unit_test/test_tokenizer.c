@@ -2,10 +2,10 @@
 #include <string.h>
 #include <kernel/tokenization.h>
 
-void println_token(const Token_t *token) {
-    printf("%s\t", token->tokn);
+void println_token(const Token_t *token, const int i) {
+    printf("%s\t", token->tokn[i]);
 
-    switch (token->type) {
+    switch (token->type[i]) {
         case NUM:   printf("number");           break;
         case SYM:   printf("symbolic");         break;
         case OPR:   printf("operator");         break;
@@ -15,10 +15,6 @@ void println_token(const Token_t *token) {
     printf("\n");
 }
 
-
-void print_token(const Token_t *token) {
-    printf("%s", token->tokn);
-}
 
 int main() {
     FILE *fp = fopen("../expressions.txt", "r");
@@ -36,16 +32,17 @@ int main() {
         
         printf("%s\n", line);
 
-        Token_t tokens[MAXNTOK];
-        int num_tokens = 0;
-
-        for (int i = 0; i < 1000000; ++i)
-            tokenize(tokens, line, &num_tokens);
-        printf("Parsed %d tokens:\n", num_tokens);
-        for (int i = 0; i < num_tokens; ++i) {
-            println_token(&tokens[i]);
+        Token_t *tokens = create_tokens();
+        
+        for (int i = 0; i < 1000000; ++i) {
+            tokenize(tokens, line);
+        }
+        printf("Parsed %d tokens:\n", tokens->ntok);
+        for (int i = 0; i < MAXNTOK; i++) {
+            println_token(tokens, i);
         }
         printf("\n\n");
+        free_tokens(tokens);
     }
 
     fclose(fp);
