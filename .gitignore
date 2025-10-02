@@ -33,3 +33,5 @@
 
 # Ignore build folders in any depth
 **/build/
+
+.vscode/
