@@ -1,7 +1,7 @@
 /******************************************************************************
  * 
- * @file tokenization.h
- * @date June 14, 2025
+ * @file number_tokenization.c
+ * @date June 29, 2025
  * @author Diep-Thanh-Phuong
  * @copyright
  *  Copyright (c) 2025 Diep-Thanh-Phuong
@@ -22,21 +22,19 @@
  * 
  *****************************************************************************/
 
-#ifndef include_kernel_tokenization_h
-#define include_kernel_tokenization_h
+#include <kernel/tokenization/symbol_tokenization.h>
 
-#include <kernel/token.h>
+void tokenize_symbol(Token_t *tok, const char *s, int *i) {
+    int j = 0;
 
-typedef void (*TokenHandler)(Token_t*, const char*, int*);
-
-extern void handle_stt(Token_t*, const char*, int*);
-extern void handle_num(Token_t*, const char*, int*);
-extern void handle_opr(Token_t*, const char*, int*);
-extern void handle_prt(Token_t*, const char*, int*);
-extern void handle_sym(Token_t*, const char*, int*);
-
-extern TokenHandler handler_tab[];
-
-TOKENSTATE tokenize(Token_t *toks, const char *s);
-
-#endif /* include_kernel_tokenization_h */
+    SYMSTATE state = S_STT;
+    while(s[*i] != '\0' && j < MAXTOKLEN - 1) {
+        char c = s[*i];
+        uint8_t cls = sym_tab[(unsigned char)c];
+        SYMSTATE nextstate = sym_fsmtab[state][cls];
+        if (nextstate == S_STT) break;
+        tok->tokn[tok->ntok][j++] = s[(*i)++];
+        state = nextstate;
+    }
+    tok->tokn[tok->ntok][j] = '\0';
+}

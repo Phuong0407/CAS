@@ -82,4 +82,4 @@ static const int numtoken_numsbtype[] = {
 NUMSTATE tokenize_number(Token_t *tok, const char *s, int *i);
 const char* state_str(NUMSTATE s);
 
-#endif // include_kernel_number_tokenization_h
+#endif /* include_kernel_number_tokenization_h */

@@ -22,7 +22,7 @@
  * 
  *****************************************************************************/
 
-#include <kernel/number_tokenization.h>
+#include <kernel/tokenization/number_tokenization.h>
 
 NUMSTATE tokenize_number(Token_t *tok, const char *s, int *i) {
     int j = 0;

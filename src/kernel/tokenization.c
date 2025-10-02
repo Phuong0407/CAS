@@ -25,8 +25,8 @@
 
 
 #include <kernel/tokenization.h>
-#include <kernel/number_tokenization.h>
-#include <kernel/symbol_tokenization.h>
+#include <kernel/tokenization/number_tokenization.h>
+#include <kernel/tokenization/symbol_tokenization.h>
 
 
 TokenHandler handler_tab[] = {
@@ -60,8 +60,6 @@ void handle_opr(Token_t* toks, const char* s, int *i) {
 }
 
 void handle_prt(Token_t* toks, const char* s, int *i) {
-    // printf("%d\t%d\n", toks->ntok, *i);
-    // printf("%d\n", s[*i]);
     (*toks).tokn[toks->ntok][0] = s[*i];
     (*toks).tokn[toks->ntok][1] = '\0';
     toks->type[toks->ntok]    = PRT;

@@ -95,7 +95,7 @@ static const int token_term[] = {
 
 /**
  *   if type == NUM
- *  sbtype = 0 INT 
+ *   sbtype = 0 INT 
  *   sbtype = 1 DEC
  *   sbtype = 2 FLP
 
@@ -159,4 +159,4 @@ static inline void add_tokenname(Token_t *tokens, const char *str) {
 }
 
 
-#endif // include_kernel_token_h
+#endif /* include_kernel_token_h */
