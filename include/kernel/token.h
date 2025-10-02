@@ -136,4 +136,27 @@ static const uint8_t prt_prtsbtype[] = {
 extern Token_t  *create_tokens();
 extern void     free_tokens(Token_t *tokens);
 
+#define GET_TOKEN_PTR(tokens, i) \
+    (&(tokens)->data[(i) * MAXTOKLEN])
+
+#define GET_TOKEN(tokens, i) \
+    ((i) < (tokens)->ntok ? GET_TOKEN_PTR(tokens, i) : NULL)
+
+static inline void set_tokenname(Token_t *tokens, int i, const char *str) {
+    if (i >= MAXNTOK) return;
+    
+    strncpy(&tokens->tokn[i * MAXTOKLEN], str, MAXTOKLEN - 1);
+    *tokens->tokn[i * MAXTOKLEN + MAXTOKLEN - 1] = '\0';
+    if (i >= tokens->ntok) {
+        tokens->ntok = i + 1;
+    }
+}
+
+static inline void add_tokenname(Token_t *tokens, const char *str) {
+    if (tokens->ntok >= MAXNTOK)
+        return;
+    set_token(tokens, tokens->ntok, str);
+}
+
+
 #endif // include_kernel_token_h
